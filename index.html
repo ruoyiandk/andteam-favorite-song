@@ -3,83 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>&TEAM 歌曲二選一對決</title>
+    <title>&TEAM 歌曲二選一大賽</title>
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-bg: #1f2833;
-            --text-color: #c5a059; /* 帶點質感的金色/黃色系 */
-            --text-light: #ffffff;
-            --accent-color: #45f3ff; /* 霓虹藍 */
-            --accent-purple: #8a2be2;
+            --primary-pink: #ffb7c5;
+            --primary-yellow: #ffe89e;
+            --dark-gray: #333333;
+            --bg-gradient: linear-gradient(135deg, #fff5f5 0%, #fffde6 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
         }
 
         body {
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-light);
-            margin: 0;
-            padding: 0;
+            background: var(--bg-gradient);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            text-align: center;
+            justify-content: center;
+            color: var(--dark-gray);
             padding: 20px;
-            width: 100%;
-            background: linear-gradient(180deg, rgba(27,38,59,1) 0%, rgba(11,12,16,1) 100%);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--accent-color);
-        }
-
-        .subtitle {
-            color: #85929E;
-            margin-top: 5px;
-            font-size: 1rem;
-        }
-
-        .progress {
-            margin: 15px 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-color);
         }
 
         .container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            color: #444;
+        }
+
+        .round-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-pink), var(--primary-yellow));
+            transition: width 0.3s ease;
+        }
+
+        .game-zone {
             display: flex;
+            gap: 20px;
             justify-content: center;
             align-items: center;
-            gap: 40px;
-            width: 90%;
-            max-width: 1000px;
-            flex-wrap: wrap;
-            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .vs-circle {
+            background: #fff;
+            border: 2px solid #ddd;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-style: italic;
+            color: #aaa;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .song-card {
-            background-color: var(--card-bg);
-            border: 2px solid #2c3b4e;
+            flex: 1;
+            min-height: 180px;
+            background: white;
+            border: 3px solid transparent;
             border-radius: 15px;
-            width: 40%;
-            min-width: 280px;
-            height: 250px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.03);
         }
+
+        .song-card:first-child {
+            background: linear-gradient(145deg, #ffffff, #fff0f2);
+        }
+
+        .song-card:last-child {
+            background: linear-gradient(145deg, #ffffff, #fffdf0);
+        }
+
+        .song-card:first-child:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 12px 20px rgba(255, 183, 197, 0.4);
+        }
+
+        .song-card:last-child:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-yellow);
+            box-shadow: 0 12px 20px rgba(255, 232, 158, 0.6);
+        }
+
+        .result-zone {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .winner-crown {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .winner-name {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #ff6b8b, #ffca28);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .restart-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background: #222;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 600px) {
+            .game-zone {
+                flex-direction: column;
+            }
+            .vs-circle {
+                margin: -5px 0;
+            }
+            .song-card {
+                width: 100%;
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="game-ui">
+        <h1>&TEAM 歌曲二選一</h1>
+        <div class="round-title" id="round-text">載入中...</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <div class="game-zone">
+            <div class="song-card" id="choice-a" onclick="selectSong(0)"></div>
+            <div class="vs-circle">VS</div>
+            <div class="song-card" id="choice-b" onclick="selectSong(1)"></div>
+        </div>
+    </div>
+
+    <div class="result-zone" id="result-ui">
+        <div class="winner-crown">👑</div>
+        <h2>你心中最愛的 &TEAM 歌曲是：</h2>
+        <div class="winner-name" id="winner-text"></div>
+        <button class="restart-btn" onclick="restartGame()">再玩一次</button>
+    </div>
+</div>
+
+<script>
+    // 32 首歌曲名單
+    const originalSongs = [
+        "桜色Yell", "君にカエル(Maybe)", "Deer Hunter", "Run Wild",
+        "illumination", "Feel the Pulse", "Bewitched", "Alien",
+        "Back to Life", "We on Fire", "雪明かり (Yukiakari)", "青嵐(Aoarashi)",
+        "Mismatch", "Big suki", "十五夜(Jyuugoya)", "Under the Skin",
+        "五月雨(Samidare)", "Heartbreak Time Machine", "HOTLINE", "W.O.L.F",
+        "Dropkick", "オオカミ系男子 (Wolf type)", "BUZZ LOVE", "Rush",
+        "向日葵 (Imprinted)", "Really Crazy", "Firework", "The final Countdown",
+        "MEME", "Melody", "三日月の願い (crescent moon’s wish)", "Go in Blind"
+    ];
+
+    let currentSongs = [];
+    let nextRoundSongs = [];
+    let matchIndex = 0;
+    let totalMatchesInRound = 0;
+    let roundName = "";
+
+    function startGame() {
+        // 隨機打散歌曲順序
+        currentSongs = [...originalSongs].sort(() => Math.random() - 0.5);
+        nextRoundSongs = [];
+        matchIndex = 0;
+        
+        document.getElementById('game-ui').style.display = 'block';
+        document.getElementById('result-ui').style.display = 'none';
+        
+        updateRoundInfo();
+        showMatch();
+    }
+
+    function updateRoundInfo() {
+        const count = currentSongs.length;
+        if (count === 32) roundName = "32 強賽";
+        else if (count === 16) roundName = "16 強賽";
+        else if (count === 8) roundName = "半準決賽 (8強)";
+        else if (count === 4) roundName = "準決賽 (4強)";
+        else if (count === 2) roundName = "✨ 總決賽 ✨";
+        
+        totalMatchesInRound = count / 2;
+    }
+
+    function showMatch() {
+        if (currentSongs.length === 1) {
+            endGame(currentSongs[0]);
+            return;
+        }
+
+        // 顯示當前對決進度
+        document.getElementById('round-text').innerText = `${roundName} (${matchIndex + 1} / ${totalMatchesInRound})`;
+        
+        // 進度條比例計算 (總共 31 場比賽)
+        const totalPlayed = (32 - currentSongs.length) + (matchIndex * 2);
+        const progressPercent = (totalPlayed / 31) * 100;
+        document.getElementById('progress').style.width = `${progressPercent}%`;
+
+        // 顯示歌曲
+        document.getElementById('choice-a').innerText = currentSongs[matchIndex * 2];
+        document.getElementById('choice-b').innerText = currentSongs[matchIndex * 2 + 1];
+    }
+
+    function selectSong(selectedIndex) {
+        const winner = currentSongs[matchIndex * 2 + selectedIndex];
+        nextRoundSongs.push(winner);
+        
+        matchIndex++;
+
+        // 檢查該輪是否結束
+        if (matchIndex >= totalMatchesInRound) {
+            currentSongs = nextRoundSongs;
+            nextRoundSongs = [];
+            matchIndex = 0;
+            updateRoundInfo();
+        }
+
+        showMatch();
+    }
+
+    function endGame(finalWinner) {
+        document.getElementById('game-ui').style.display = 'none';
+        document.getElementById('result-ui').style.display = 'block';
+        document.getElementById('winner-text').innerText = finalWinner;
+    }
+
+    function restartGame() {
+        startGame();
+    }
+
+    window.onload = startGame;
+</script>
+
+</body>
+</html>
