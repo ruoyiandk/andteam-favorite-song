@@ -218,16 +218,16 @@
 </div>
 
 <script>
-    // 32 首歌曲名單
+    // 完整重現圖片中的 32 首歌曲
     const originalSongs = [
-        "桜色Yell", "君にカエル(Maybe)", "Deer Hunter", "Run Wild",
-        "illumination", "Feel the Pulse", "Bewitched", "Alien",
-        "Back to Life", "We on Fire", "雪明かり (Yukiakari)", "青嵐(Aoarashi)",
-        "Mismatch", "Big suki", "十五夜(Jyuugoya)", "Under the Skin",
-        "五月雨(Samidare)", "Heartbreak Time Machine", "HOTLINE", "W.O.L.F",
-        "Dropkick", "オオカミ系男子 (Wolf type)", "BUZZ LOVE", "Rush",
-        "向日葵 (Imprinted)", "Really Crazy", "Firework", "The final Countdown",
-        "MEME", "Melody", "三日月の願い (crescent moon’s wish)", "Go in Blind"
+        "Sakura-iro Yell", "Maybe", "Deer Hunter", "Run Wild",
+        "illumination", "crescent moon's wish", "Biwitched", "Feel the Pulse",
+        "Back to Life", "We on Fire", "Go in Blind", "Firework",
+        "Yukiakari", "Aoarashi", "Mismatch", "Big suki",
+        "Jyuugoya", "Alien", "Under the skin", "Samidare",
+        "Heartbreak Time Machine", "HOTLINE", "W.O.L.F", "Wolf type",
+        "The final Countdown", "BUZZ LOVE", "Melody", "MEME",
+        "Rush", "Imprinted", "Dropkick", "Really Crazy"
     ];
 
     let currentSongs = [];
@@ -237,7 +237,7 @@
     let roundName = "";
 
     function startGame() {
-        // 隨機打散歌曲順序
+        // 洗牌演算法（可自由選擇要不要隨機，這裡先預設洗牌讓每次玩都有新鮮感）
         currentSongs = [...originalSongs].sort(() => Math.random() - 0.5);
         nextRoundSongs = [];
         matchIndex = 0;
@@ -266,26 +266,28 @@
             return;
         }
 
-        // 顯示當前對決進度
+        // 顯示當前對決組別與進度
         document.getElementById('round-text').innerText = `${roundName} (${matchIndex + 1} / ${totalMatchesInRound})`;
         
-        // 進度條比例計算 (總共 31 場比賽)
+        // 計算總進度 (這裏用簡單的對戰進度百分比)
+        // 總共會進行 16+8+4+2+1 = 31 場比賽
         const totalPlayed = (32 - currentSongs.length) + (matchIndex * 2);
         const progressPercent = (totalPlayed / 31) * 100;
         document.getElementById('progress').style.width = `${progressPercent}%`;
 
-        // 顯示歌曲
+        // 帶入歌曲名稱
         document.getElementById('choice-a').innerText = currentSongs[matchIndex * 2];
         document.getElementById('choice-b').innerText = currentSongs[matchIndex * 2 + 1];
     }
 
     function selectSong(selectedIndex) {
+        // 選擇 A 或是 B
         const winner = currentSongs[matchIndex * 2 + selectedIndex];
         nextRoundSongs.push(winner);
         
         matchIndex++;
 
-        // 檢查該輪是否結束
+        // 檢查當前輪次是否全部比完
         if (matchIndex >= totalMatchesInRound) {
             currentSongs = nextRoundSongs;
             nextRoundSongs = [];
@@ -293,6 +295,7 @@
             updateRoundInfo();
         }
 
+        // 播放下一場
         showMatch();
     }
 
@@ -306,6 +309,7 @@
         startGame();
     }
 
+    // 網頁載入後自動啟動
     window.onload = startGame;
 </script>
 
